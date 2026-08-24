@@ -4,6 +4,8 @@ const cors = require("cors");
 const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("express-mongo-sanitize");
+const globalErrorHandler = require("./controller/errorController");
+const AppError = require("./utils/appError");
 
 const app = express();
 
@@ -49,5 +51,11 @@ app.get("/", (req, res) => {
     message: "Just for testing",
   });
 });
+
+app.use((req, res, next) => {
+  next(new AppError(`can't find ${req.originalUrl} on this server !`, 404));
+});
+
+app.use(globalErrorHandler);
 
 module.exports = app;
