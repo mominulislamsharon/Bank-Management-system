@@ -6,6 +6,7 @@ const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("express-mongo-sanitize");
 const globalErrorHandler = require("./controller/errorController");
 const AppError = require("./utils/appError");
+const companyRouter = require("./routes/companyRoutes");
 
 const app = express();
 
@@ -44,6 +45,10 @@ app.use((req, res, next) => {
   req.querySanitized = queryCopy;
   next();
 });
+
+app.use("/api/v1/company", companyRouter);
+
+// localhost:8000/api/v1/company/all
 
 app.get("/", (req, res) => {
   res.status(200).json({
